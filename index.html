@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REU Site: DE-STRESS - DEsigning Sedimentation and Tectonics Research Experiences for Student Success</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1e40af;
+            --accent-color: #f59e0b;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
+            --background-light: #f8fafc;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-dark);
+            margin: 3px 0;
+            transition: 0.3s;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-bottom: 100px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            max-width: 800px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+            color: var(--primary-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 70px;
+        }
+
+        .page {
+            display: none;
+            min-height: calc(100vh - 70px);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            text-align: center;
+            margin-bottom: 60px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Cards */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid #e5e7eb;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--text-dark);
+        }
+
+        /* Program Highlights */
+        .highlight-section {
+            background: var(--background-light);
+            padding: 80px 0;
+        }
+
+        .highlight-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .highlight-item {
+            text-align: center;
+        }
+
+        .highlight-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .highlight-text {
+            font-size: 1.1rem;
+            color: var(--text-light);
+        }
+
+        /* Application Info */
+        .deadline-banner {
+            background: linear-gradient(135deg, var(--accent-color), #f97316);
+            color: var(--white);
+            padding: 20px 0;
+            text-align: center;
+            margin: 40px 0;
+            border-radius: 10px;
+        }
+
+        .deadline-banner h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #9ca3af;
+            text-decoration: none;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .footer-section a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            margin-top: 40px;
+            padding-top: 20px;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: var(--white);
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                padding-top: 50px;
+                transition: left 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .mobile-menu {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .loading.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <img src="logo1.png" alt="DE-STRESS REU Logo">
+                DE-STRESS REU
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#program" class="nav-link">Program</a></li>
+                <li><a href="#research" class="nav-link">Research</a></li>
+                <li><a href="#faculty" class="nav-link">Faculty</a></li>
+                <li><a href="#apply" class="nav-link">Apply</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="mobile-menu" id="mobileMenu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Pages -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <section class="hero">
+                <div class="hero-content">
+                    <h1 class="loading">REU Site: DE-STRESS</h1>
+                    <p class="subtitle loading" style="max-width: 800px;">DEsigning Sedimentation & Tectonics Research Experiences for Student Success</p>
+                    
+                    <!-- Logo Image positioned below subtitle -->
+                    <div style="text-align: center; margin: 30px 0;">
+                        <img src="logo1.png" alt="DE-STRESS REU Program Logo" style="max-width: 400px; height: auto;">
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 10px; margin: 30px 0; max-width: 800px;">
+                        <p style="font-size: 1.1rem; margin: 0;">A year-long geoscience research experience tailored for students with non-traditional schedules</p>
+                    </div>
+                    
+                    <!-- Program Objectives -->
+                    <div style="background: rgba(255,255,255,0.08); padding: 25px; border-radius: 15px; margin: 30px 0; max-width: 800px; border-left: 4px solid var(--accent-color);">
+                        <h3 style="margin: 0 0 15px 0; font-size: 1.2rem;">Program Objectives:</h3>
+                        <ul style="text-align: left; line-height: 1.6; margin: 0; padding-left: 20px;">
+                            <li>Provide students with real-world research and training experiences</li>
+                            <li>Familiarize students with field and laboratory techniques</li>
+                            <li>Highlight geoscience research importance for urban/suburban areas</li>
+                            <li>Broaden student perspectives on geoscience careers and educational paths</li>
+                        </ul>
+                        <p style="margin: 15px 0 0 0; font-style: italic;">These objectives are accomplished through mentored team projects incorporating field, lab, and professional development components while achieving a common research goal of improving understanding of the long- and short-term slip history and evolution of the San Andreas Fault system.</p>
+                    </div>
+
+                    <div class="cta-buttons loading">
+                        <a href="#apply" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Apply Now
+                        </a>
+                        <a href="#program" class="btn btn-secondary">
+                            <i class="fas fa-info-circle"></i> Learn More
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="highlight-section">
+                <div class="container">
+                    <h2 class="section-title loading">Program Highlights</h2>
+                    <div class="highlight-grid">
+                        <div class="highlight-item loading">
+                            <div class="highlight-number">Year-Long</div>
+                            <div class="highlight-text">Research Experience</div>
+                        </div>
+                        <div class="highlight-item loading">
+                            <div class="highlight-number">10</div>
+                            <div class="highlight-text">Research Positions</div>
+                        </div>
+                        <div class="highlight-item loading">
+                            <div class="highlight-number">2+8</div>
+                            <div class="highlight-text">Community College + 4-Year Students</div>
+                        </div>
+                        <div class="highlight-item loading">
+                            <div class="highlight-number">San Andreas</div>
+                            <div class="highlight-text">Fault Research</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Program Page -->
+        <div id="program" class="page">
+            <div class="container">
+                <h2 class="section-title">Program Overview</h2>
+                <p class="section-subtitle">A unique year-long program designed for students who may be unable to participate in traditional 6-8 week summer REU programs due to work, family, or financial obligations.</p>
+                
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>Year-Long Format</h3>
+                        <p>Two intensive 2-week sessions (winter field work at CSUSB, summer lab work at UC) plus virtual meetings and workshops throughout the academic year.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-mountain"></i>
+                        </div>
+                        <h3>San Andreas Fault Research</h3>
+                        <p>Study sediments and geomorphic surfaces that record the tectonic evolution of the San Andreas fault system near San Bernardino, California.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Cohort-Based Learning</h3>
+                        <p>Work as part of a research team with fellow students and faculty mentors from CSUSB and University of Cincinnati.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-presentation"></i>
+                        </div>
+                        <h3>Conference Presentation</h3>
+                        <p>Present your research at the Geological Society of America national meeting with full travel funding provided.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>Geology Majors</h3>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>8-10 slots available for the year-long experience</li>
+                            <li>Travel expenses and 5 weeks of stipend ($700/wk) are provided</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-school"></i>
+                        </div>
+                        <h3>Community College Students</h3>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>8-10 slots available for 2-week-long experiences</li>
+                            <li>Students local to inland southern CA can participate in field work in January</li>
+                            <li>Students local to Cincinnati, OH metro can participate lab work in June</li>
+                            <li>Travel expenses and weekly stipend ($700/wk) are provided</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="deadline-banner">
+                    <h3><i class="fas fa-calendar-alt"></i> Application Deadline: October 31, 2025</h3>
+                    <p>Program runs January-October of each year, culminating with a GSA conference presentation</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Research Page -->
+        <div id="research" class="page">
+            <div class="container">
+                <h2 class="section-title">Research Focus</h2>
+                <p class="section-subtitle">Investigating the slip history and evolution of the southern San Andreas fault system through sedimentological, geochronological, and geomorphic analyses.</p>
+                
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <h3>Sedimentology Track</h3>
+                        <p>Analyze middle Miocene to Pleistocene sedimentary basins and deposits. Study facies patterns, clast counts, and provenance to understand basin evolution and fault slip history.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-mountain"></i>
+                        </div>
+                        <h3>Neotectonics/Geomorphology Track</h3>
+                        <p>Use drone-based LiDAR and photogrammetry to map Quaternary surfaces and their relationship to faults. Calculate slip rates from offset geomorphic features.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <h3>Geochronology Methods</h3>
+                        <p>Apply detrital zircon U-Pb dating, <sup>40</sup>Ar/<sup>39</sup>Ar dating, and Quaternary dating methods (TCN, OSL) to constrain timing of deposition and deformation.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Key Research Questions</h3>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>How do individual faults organize in space and time?</li>
+                            <li>How do long-term slip rates compare to recent rates?</li>
+                            <li>What drives strain and landscape evolution?</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Faculty Page -->
+        <div id="faculty" class="page">
+            <div class="container">
+                <h2 class="section-title">Faculty Mentors</h2>
+                <p class="section-subtitle">Work with experienced faculty from California State University San Bernardino and University of Cincinnati.</p>
+                
+                <div style="background: var(--background-light); padding: 40px; border-radius: 15px; margin-bottom: 40px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 20px; text-align: center;">CSUSB Mentors</h3>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3>Dr. Tandis Bidgoli - PI</h3>
+                            <p><strong>Structural Geology, Neotectonics, & Geo-/Thermochronology</strong><br><br>
+                            Leads the REU program; studies patterns and drivers of deformation and landscape evolution using structural analysis, sedimentological records, and geo-/thermochronology. Mentors students in structural geology and geochronology.<br><br>
+                            <a href="https://www.csusb.edu/profile/tandis.bidgoli" target="_blank" style="color: var(--primary-color);">Faculty Webpage</a></p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3>Dr. Susana Henriquez</h3>
+                            <p><strong>Structural Geology, Sedimentology, & Thermochronology</strong><br><br>
+                            Investigates deformation and mountain building through structural analysis, sedimentological records, and thermochronology. Mentors students in interpreting tectonic histories through field, lab work, and modeling.<br><br>
+                            <a href="https://www.csusb.edu/profile/susana.henriquez" target="_blank" style="color: var(--primary-color);">Faculty Webpage</a></p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3>Dr. Claire Todd</h3>
+                            <p><strong>Geomorphology & Quaternary Geochronology</strong><br><br>
+                            Reconstructs landscape evolution, exposure histories, and erosion rates through geomorphology and use of in-situ produced isotopes. Mentors students in field-based geomorphic analysis and Quaternary dating methods.<br><br>
+                            <a href="https://www.csusb.edu/profile/claire.todd" target="_blank" style="color: var(--primary-color);">Faculty Webpage</a></p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3>Dr. Kerry Cato</h3>
+                            <p><strong>Engineering Geology, Remote Sensing, & Hazard Analysis</strong><br><br>
+                            Specializes in applied geologic hazards analysis, with a focus on landslides, debris flows, slope stability and site investigations. Mentors students in using small UAV and terrestrial LiDAR data acquisition, processing, and geologic mapping.<br><br>
+                            <a href="https://www.csusb.edu/profile/kerry.cato" target="_blank" style="color: var(--primary-color);">Faculty Webpage</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: var(--white); border: 2px solid var(--primary-color); padding: 40px; border-radius: 15px; margin-bottom: 40px;">
+                    <h3 style="color: var(--primary-color); margin-bottom: 20px; text-align: center;">UC Mentors</h3>
+                    <div class="cards-grid">
+                        <div class="card">
+                            <div class="card-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3>Dr. Daniel Sturmer - Co-PI</h3>
+                            <p><strong>Sedimentology & Basin Analysis</strong><br><br>
+                            Co-leads the REU program; focuses on sedimentary processes and tectonic interactions using sedimentologic records and stable isotopes. Mentors students in field- and lab-based sedimentologic analysis.<br><br>
+                            <a href="https://researchdirectory.uc.edu/p/sturmedm" target="_blank" style="color: var(--primary-color);">Faculty Webpage</a></p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3>Dr. Dylan Ward</h3>
+                            <p><strong>Geomorphology and Quaternary Geochronology</strong><br><br>
+                            Explores landscape evolution and surface processes like erosion and river incision. Mentors students in field-based geomorphic analysis and modeling.<br><br>
+                            <a href="https://researchdirectory.uc.edu/p/warddy" target="_blank" style="color: var(--primary-color);">Faculty Webpage</a></p>
+                        </div>
+                        <div class="card">
+                            <div class="card-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <h3>Dr. Craig Dietsch</h3>
+                            <p><strong>Petrology & Geochronology</strong><br><br>
+                            Studies metamorphic and structural processes in continental crust. Mentors students in petrography, geochronology, and tectonic synthesis.<br><br>
+                            <a href="https://researchdirectory.uc.edu/p/dietscc" target="_blank" style="color: var(--primary-color);">Faculty Webpage</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: var(--accent-color); color: var(--white); padding: 30px; border-radius: 15px;">
+                    <h3 style="margin-bottom: 20px; text-align: center;">External Evaluator</h3>
+                    <div class="card" style="background: rgba(255,255,255,0.1); border: none;">
+                        <div class="card-icon" style="background: rgba(255,255,255,0.2);">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <h3 style="color: var(--white);">Dr. Amy Myrbo</h3>
+                        <p style="color: rgba(255,255,255,0.9);"><strong>Program Evaluation</strong><br><br>
+                        She holds a Ph.D. in Geology and B.A. in English, and was Director of Outreach, Diversity, and Education at the NSF-funded LacCore and Continental Scientific Drilling Coordination Office at the University of Minnesota (UMN) from 2014-2019. She has collaborated with Tribal resource managers, educators, and youth on scientific projects for 14 years, and conducted numerous urban research projects with undergraduates from groups underrepresented in the geosciences while at UMN. She is a member of the American Evaluation Association since 2019.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Apply Page -->
+        <div id="apply" class="page">
+            <div class="container">
+                <h2 class="section-title">Application Information</h2>
+                <p class="section-subtitle">Join our research community focused on broadening participation in geoscience research.</p>
+                
+                <div class="deadline-banner">
+                    <h3><i class="fas fa-calendar-alt"></i> Application Deadline: October 31, 2025</h3>
+                    <p>Program runs January 2026 - October 2026</p>
+                </div>
+
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>Eligibility Requirements</h3>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>U.S. citizen or permanent resident</li>
+                            <li>Currently enrolled undergraduate student</li>
+                            <li>Preferably junior-level geoscience majors</li>
+                            <li>Students unable to participate in traditional programs</li>
+                            <li>Strong interest in research</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-gift"></i>
+                        </div>
+                        <h3>Program Benefits</h3>
+                        <ul style="text-align: left; margin-top: 15px;">
+                            <li>Stipend for participation</li>
+                            <li>All travel expenses covered</li>
+                            <li>Hotel accommodation provided</li>
+                            <li>GSA conference travel funding</li>
+                            <li>Professional development workshops</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 50px;">
+                    <h3 style="margin-bottom: 20px; color: var(--text-dark);">Ready to Apply?</h3>
+                    <a href="https://forms.google.com/your-form-link" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 10px; padding: 20px 40px; font-size: 1.1rem;">
+                        <i class="fas fa-external-link-alt"></i> Complete Application Form
+                    </a>
+                    <p style="margin-top: 15px; color: var(--text-light);">The application form will open in a new tab</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact" class="page">
+            <div class="container">
+                <h2 class="section-title">Contact Information</h2>
+                <p class="section-subtitle">Questions about the DE-STRESS REU program? We're here to help!</p>
+                
+                <div class="cards-grid">
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3>Principal Investigator</h3>
+                        <p><strong>Dr. Tandis Bidgoli</strong><br>
+                        California State University San Bernardino<br>
+                        Department of Geological Sciences<br>
+                        Email: tandis.bidgoli@csusb.edu</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h3>Co-Principal Investigator</h3>
+                        <p><strong>Dr. Daniel Sturmer</strong><br>
+                        University of Cincinnati<br>
+                        Department of Geosciences<br>
+                        Email: sturmedm@ucmail.uc.edu</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Loading animations
+        window.addEventListener('load', function() {
+            const loadingElements = document.querySelectorAll('.loading');
+            loadingElements.forEach((el, index) => {
+                setTimeout(() => {
+                    el.classList.add('loaded');
+                }, index * 200);
+            });
+        });
+
+        // Navigation functionality
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            // Update nav link states
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            const activeLink = document.querySelector(`a[href="#${pageId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+        }
+
+        // Handle navigation clicks
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                const pageId = href.substring(1); // Remove the #
+                showPage(pageId);
+                
+                // Close mobile menu
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+
+        // Handle CTA button clicks
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+                const pageId = href.substring(1); // Remove the #
+                showPage(pageId);
+            });
+        });
+
+        // Mobile menu toggle
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navLinks = document.getElementById('navLinks');
+
+        if (mobileMenu) {
+            mobileMenu.addEventListener('click', function() {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // Initialize - show home page by default
+        showPage('home');
+    </script>
+</body>
+</html>
